@@ -57,7 +57,7 @@ begin
     prov:= 0;
 end;
 Begin
-  writeln('введите название файла(путь): ';
+  writeln('введите название файла(путь):');
   readln(filename);
   j:=1;
   i:=1;
