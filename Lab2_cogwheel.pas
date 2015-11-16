@@ -48,7 +48,7 @@ begin
           inc(prov);
           end;
    end;
-  //проверка на неподвижность  
+  //проверка на неподвижность, если неподвижна, то мы ее не включаем в массив
   if prov < 1  then
     begin
     processing_clockwise:= 3;
@@ -57,7 +57,8 @@ begin
     prov:= 0;
 end;
 Begin
-  filename:= 'g.txt';
+  writeln('введите название файла(путь): ';
+  readln(filename);
   j:=1;
   i:=1;
   k:=1;
@@ -305,6 +306,7 @@ while num_cog < number+1 do
 //writeln('неподвижка');
 //writeln(fixed_compressed);
 //проверка не неисправность
+writeln();
 if (k-1) <> k2 then
   writeln('Ваша система неисправна')
 //конец проверки,выдача на экран информации по шестеренкам
