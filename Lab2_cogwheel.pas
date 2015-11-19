@@ -141,8 +141,6 @@ Begin
         //  if 
         inc(counting_rows);
       End;
-    writeln('всего шестеренок: ',number);
-    writeln('всего пар шестеренок: ',n_par); 
     //writeln(cogwheel);    
     close(input_f);
     //m1:=m-1;
@@ -306,12 +304,15 @@ while num_cog < number+1 do
 //writeln('неподвижка');
 //writeln(fixed_compressed);
 //проверка не неисправность
-writeln();
+if  counting_rows > 2 then
+begin
 if (k-1) <> k2 then
   writeln('Ваша система неисправна')
 //конец проверки,выдача на экран информации по шестеренкам
 else  
   begin
+    writeln('всего шестеренок: ',number);
+    writeln('всего пар шестеренок: ',n_par); 
     writeln('Шестеренки по часовой: ');
     for i:=1 to k5 do writeln(cogwise_r_compressed[i]:3);
     writeln;
@@ -323,6 +324,9 @@ else
   end;
 //конец проверки
   //writeln(fixed_count - 1); это число фиксиров шестер
+  end
+else
+  writeln('задайте данные правильно');
     END;
 End.
     
