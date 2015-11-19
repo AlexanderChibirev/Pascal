@@ -1,6 +1,12 @@
 ﻿program lab2;
-//вариант 20 задача про шестеренки, в текстовом файле записываем вначале сколько всего шестеренок, потом сколько всего пар, и только после этого сами пары
-Const N = 2000;
+{22. На  плоскости  расположена  система  из  N  шестеренок,
+которая  приводится  в  движение  вращением  шестеренки  1  по
+часовой стрелке.  Сцепленные шестеренки могут вращаться только
+в    противоположных    направлениях.   Требуется   определить
+направление движения каждой шестеренки  либо  установить,  что
+систему   заклинит.   Некоторые   шестеренки   могут  остаться
+неподвижными (10).}
+Const N = 20000;
 var
   cogwheel : array [1..N*2, 1..2] of integer;
   fixed: array [1..N*20] of integer;
@@ -11,7 +17,7 @@ var
   cogwise_l_compressed: array[1..N*2] of integer;
   fixed_compressed: array[1..N*2] of integer;
   ender_array: array[1..N*3] of integer;
-  i, number,n_par,num_cog, j,k,spicok_par_left_int, spicok_par_right_int,flag_for_mass2,counting_rows,m,num,k2,k3,k4,a1,k5: integer;
+  i, number,n_par,num_cog, j,k,spicok_par_left_int, spicok_par_right_int,flag_for_mass2,counting_rows,m,num,k2,k3,k4,a1,k5,num_cog1: integer;
   count_r, count_l,flag1, flag_for_mass,prov,fixed_count:integer;
   input_f: TEXT;
   line,flag, filename, spicok_par_left, spicok_par_right :string;
@@ -150,6 +156,8 @@ Begin
     cogwise_r[count_r]:= 1;
     inc(count_r);
     flag_for_mass:= 1;
+    while num_cog1 < number+1 do
+    begin
     while num_cog < number+1 do
     begin      
       flag_for_mass:= processing_clockwise(num_cog,flag_for_mass); //êîòîðàÿ âîçâðàùàåò çíà÷åíèå ôëàãà      
@@ -197,12 +205,16 @@ Begin
       end
       else if flag_for_mass= 3 then
         flag_for_mass:= flag_for_mass2;
-    inc(num_cog);  
-    end;   
+    inc(num_cog);
     //write('массив против часовой: ');
-    //writeln(cogwise_l);
+//writeln(cogwise_l);
     //write('массив по часовой: ');
     //writeln(cogwise_r);
+    //writeln();
+    end;
+    num_cog:=1;
+    inc(num_cog1);
+    end;   
 //обход по часовой стрелки, удаление повторов++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 i:=0;
 j:=0;
@@ -329,4 +341,3 @@ else
   writeln('задайте данные правильно');
     END;
 End.
-    
