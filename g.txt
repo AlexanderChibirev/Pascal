@@ -1,11 +1,113 @@
-8
-9
-1,2
-2,3
-3,4
-4,1
-5,6
-6,7
-7,5
-3,8
-8,5
+#define _USE_MATH_DEFINES
+
+#include <SFML/Graphics.hpp>
+#include <iostream> 
+#include <windows.h>
+#include  <math.h>
+#include "const.h"
+using namespace sf;
+float ThisIsAPi = float(M_PI);
+
+
+struct Shapes {
+	ConvexShape second;
+	ConvexShape minute;
+	ConvexShape hour;
+	ConvexShape dot;
+	CircleShape clock_wall;
+};
+
+Shapes MyClock;
+
+void ini_shape(Shapes &MyClock, int depth) { //задаем позицию появления стрелок
+	MyClock.hour.setRotation(-90);
+	MyClock.hour.setPosition(START_X, START_Y); //делаем смещение, чтобы появляение стрелок было внутри круга в центре
+	MyClock.minute.setRotation(-90);
+	MyClock.minute.setPosition(START_X, START_Y); //делаем смещение, чтобы появляение стрелок было внутри круга в центре
+	MyClock.second.setRotation(-90);
+	MyClock.second.setPosition(START_X, START_Y); //делаем смещение, чтобы появляение стрелок было внутри круга в центр															
+}
+
+void coord_dots(float(&arrayX)[60], float(&arrayY)[60]) { //делаем штрихи круговыми и смещаем их по х на 140 по у на 100, чтобы не испортить изображение
+	for (int i = 0; i < 60; i++) {
+		arrayX[i] = START_X + RAD_DIAL * cos(i * ONE_SECOND * ThisIsAPi / 180);
+		arrayY[i] = START_Y + RAD_DIAL * sin(i * ONE_SECOND * ThisIsAPi / 180);
+	}
+}
+
+void draw_dots(RenderWindow &window, Shapes & MyClock, float(&arrayX)[60], float(&arrayY)[60]) { //рисуем штрихи
+	for (int i = 0; i < 60; i++) {
+		MyClock.dot.setPosition(arrayX[i], arrayY[i]);
+		window.draw(MyClock.dot);
+	}
+}
+void start_move_time(RenderWindow &window, Shapes & MyClock, CircleShape clock_wall) {
+	float arrayX[60], arrayY[60];
+	SYSTEMTIME sysTime;
+	coord_dots(arrayX, arrayY);
+	while (window.isOpen()) {
+		GetSystemTime(&sysTime);
+		MyClock.second.setRotation(float(sysTime.wSecond * 6 - 90));
+		MyClock.minute.setRotation(float(sysTime.wMinute * 6 - 90));
+		MyClock.hour.setRotation(float((sysTime.wHour + 3) * 30 - 90));
+		Event event;
+
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed)
+				window.close();
+		}
+		window.clear((Color(0, 0, 0)));
+		window.draw(clock_wall);
+		draw_dots(window, MyClock, arrayX, arrayY);
+		window.draw(MyClock.hour);
+		window.draw(MyClock.minute);
+		window.draw(MyClock.second);
+		window.display();
+	}
+}
+void start_move_object(RectangleShape arrowH, RectangleShape arrowM, RectangleShape arrowS, RectangleShape dot) {
+	float arrayX[60], arrayY[60];
+	SYSTEMTIME sysTime;
+	coord_dots(arrayX, arrayY);
+
+
+}
+void make_object(Shapes &MyClock) {
+	MyClock.dot.setPoint(0,Vector2f(2, 2)); 
+	MyClock.dot.setFillColor(Color::White); //цвет штрихов
+
+	MyClock.hour.setPoint(1,Vector2f(150, 11));
+	ini_shape(MyClock, 10);
+	MyClock.hour.setFillColor(sf::Color(183, 243, 249));
+
+	MyClock.minute.setPoint(1, Vector2f(150, 11));
+	ini_shape(MyClock, 6);
+	MyClock.minute.setFillColor(sf::Color(183, 243, 249));
+
+	MyClock.second.setPoint(3,Vector2f(250, 4));
+	ini_shape(MyClock, 3);
+	MyClock.second.setFillColor(sf::Color(183, 243, 249));
+}
+
+int main() {
+	
+	make_object(MyClock);
+
+	ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
+	RenderWindow window(VideoMode(1080, 1000), "Analog clock", Style::Default, settings);
+
+	Texture background_texture;//создаем объект Texture (текстура)
+	background_texture.loadFromFile("background.jpeg");//передаем в него объект Image (изображения)
+
+	CircleShape clock_wall(RADIUS - 80);
+	clock_wall.setPosition(227, 185); //позиция часов делаем смещение, чтобы часы были по цент
+
+	clock_wall.setTexture(&background_texture);
+	clock_wall.setOutlineThickness(40);
+	clock_wall.setOutlineColor(Color(34, 0, 34));
+
+	start_move_time(window, MyClock, clock_wall);
+	return 0;
+}
