@@ -156,7 +156,7 @@ Begin
     cogwise_r[count_r]:= 1;
     inc(count_r);
     flag_for_mass:= 1;
-    while num_cog < number+1 do
+    while num_cog1 < number+1 do
     begin
     while num_cog < number+1 do
     begin      
